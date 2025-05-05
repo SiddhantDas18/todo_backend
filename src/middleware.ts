@@ -4,7 +4,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 const SECRET = process.env.SECRET
 
-export default async function (req:any,res:any,next:any){
+
+
+export default async function (req:any,res:any,next:any ){
     const authorization = req.headers['authorization']
     
     if(!authorization){
@@ -17,10 +19,17 @@ export default async function (req:any,res:any,next:any){
 
 
     try{
-        const decode = jwt.verify(token,SECRET as string)
+
+        
+        
+        const decode = (jwt.verify(token,SECRET as string)) as {id:string}
+
         if(decode){
-            //@ts-ignore
-            req.id=decode.id
+
+            const check = typeof(decode)
+            console.log(check)
+            const {id} = decode
+            req.id=id
             next()
         }
     }catch(e){
